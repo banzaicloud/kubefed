@@ -4,7 +4,7 @@
 version: 2.1
 
 orbs:
-  helm: banzaicloud/helm@0.0.3
+  helm: banzaicloud/helm@0.0.4
 
 workflows:
   version: 2
@@ -12,14 +12,14 @@ workflows:
   helm-chart:
     jobs:
       - helm/lint-chart:
-          chart-path: charts/kubefed
+          charts-dir: charts
           filters:
             tags:
               ignore: /.*/
 
       - helm/publish-chart:
           context: helm
-          chart-path: charts/kubefed
+          charts-dir: charts
           filters:
             branches:
               ignore: /.*/
