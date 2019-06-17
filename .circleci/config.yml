@@ -9,18 +9,17 @@ orbs:
 workflows:
   version: 2
 
-  helm-chart-lint:
+  helm-chart:
     jobs:
       - helm/lint-chart:
-          charts-dir: charts
+          chart-path: charts/kubefed
           filters:
             tags:
               ignore: /.*/
-  helm-chart-publish:
-    jobs:
+
       - helm/publish-chart:
           context: helm
-          charts-dir: charts
+          chart-path: charts/kubefed
           filters:
             branches:
               ignore: /.*/
