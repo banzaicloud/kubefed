@@ -9,14 +9,15 @@ orbs:
 workflows:
   version: 2
 
-  helm-chart:
+  helm-chart-lint:
     jobs:
       - helm/lint-chart:
           charts-dir: charts
           filters:
             tags:
               ignore: /.*/
-
+  helm-chart-publish:
+    jobs:
       - helm/publish-chart:
           context: helm
           charts-dir: charts
