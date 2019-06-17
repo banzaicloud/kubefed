@@ -2,21 +2,18 @@
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
-
 orbs:
-  helm: banzaicloud/helm@0.0.4
-
+  helm: banzaicloud/helm@v0.0.4
 workflows:
-  version: 2
-
-  helm-chart:
+  helm-chart-lint:
     jobs:
       - helm/lint-chart:
           charts-dir: charts
           filters:
             tags:
               ignore: /.*/
-
+  helm-chart-release:
+    jobs:
       - helm/publish-chart:
           context: helm
           charts-dir: charts
