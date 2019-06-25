@@ -19,11 +19,16 @@ workflows:
 
       - helm/publish-chart:
           context: helm
+          charts-dir: charts/kubefed/charts
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /chart\/controllermanager\/\d+.\d+.\d+/
+
+      - helm/publish-chart:
+          context: helm
           charts-dir: charts
-          add-extra-repositories:
-            - run: >-
-                helm repo add extra
-                https://raw.githubusercontent.com/banzaicloud/kubefed/master/charts
           filters:
             branches:
               ignore: /.*/
