@@ -1,0 +1,28 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2.1
+
+orbs:
+  helm: banzaicloud/helm@dev:0.0.5
+
+workflows:
+  version: 2
+
+  helm-chart:
+    jobs:
+      - helm/lint-chart:
+          charts-dir: charts
+          filters:
+            tags:
+              ignore: /.*/
+
+      - helm/publish-chart:
+          context: helm
+          charts-dir: charts
+          skip-dependency-update: True
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /chart\/kubefed\/\d+.\d+.\d+-\w+/
