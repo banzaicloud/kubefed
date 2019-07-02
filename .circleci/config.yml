@@ -4,7 +4,7 @@
 version: 2.1
 
 orbs:
-  helm: banzaicloud/helm@0.0.4
+  helm: banzaicloud/helm@dev:0.0.5
 
 workflows:
   version: 2
@@ -19,16 +19,8 @@ workflows:
 
       - helm/publish-chart:
           context: helm
-          charts-dir: charts/kubefed/charts
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /chart\/controllermanager\/\d+.\d+.\d+/
-
-      - helm/publish-chart:
-          context: helm
           charts-dir: charts
+          skip-dependency-update: True
           filters:
             branches:
               ignore: /.*/
