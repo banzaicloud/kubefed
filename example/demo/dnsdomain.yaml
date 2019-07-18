@@ -1,0 +1,9 @@
+apiVersion: multiclusterdns.kubefed.k8s.io/v1alpha1
+kind: Domain
+metadata:
+  # Corresponds to <federation> in the resource records.
+  name: satellite
+  # The namespace running kubefed-controller-manager.
+  namespace: federation-system
+# The domain/subdomain that is setup in your external-dns provider.
+domain: sancyx.beta.banzaicloud.io

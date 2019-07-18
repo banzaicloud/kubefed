@@ -1,0 +1,30 @@
+apiVersion: types.kubefed.k8s.io/v1beta1
+kind: FederatedDeployment
+metadata:
+  name: test-deployment
+  namespace: test
+spec:
+  template:
+    metadata:
+      labels:
+        app: satellite
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: satellite
+      template:
+        metadata:
+          labels:
+            app: satellite
+        spec:
+          terminationGracePeriodSeconds: 2
+          containers:
+          - name: satellite-service
+            image: banzaicloud/satellite:0.0.3
+            ports:
+            - containerPort: 8888
+  placement:
+    clusterSelector:
+      matchLabels:
+        groupName: test

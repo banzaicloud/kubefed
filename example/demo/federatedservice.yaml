@@ -1,0 +1,19 @@
+apiVersion: types.kubefed.k8s.io/v1beta1
+kind: FederatedService
+metadata:
+  name: satellite
+  namespace: test
+spec:
+  template:
+    spec:
+      selector:
+        app: satellite
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: 80
+          targetPort: 8888
+  placement:
+    clusterSelector:
+      matchLabels:
+        groupName: test
