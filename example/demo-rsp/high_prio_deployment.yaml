@@ -1,0 +1,34 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "High priority for important pods"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: highprio
+  namespace: test
+spec:
+  replicas: 8
+  selector:
+    matchLabels:
+      app: highprio
+  template:
+    metadata:
+      labels:
+        app: highprio
+    spec:
+      terminationGracePeriodSeconds: 2
+      priorityClassName: high-priority
+      containers:
+      - name: satellite-service
+        image: banzaicloud/satellite:0.0.3
+        ports:
+        - containerPort: 8888
+        resources:
+          requests:
+            cpu: 300m
+            memory: 512Mi

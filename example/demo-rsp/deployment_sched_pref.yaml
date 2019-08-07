@@ -1,0 +1,14 @@
+apiVersion: scheduling.kubefed.io/v1alpha1
+kind: ReplicaSchedulingPreference
+metadata:
+  name: test-deployment
+  namespace: test
+spec:
+  clusters:
+    banzaionprem:
+      weight: 3
+    banzaispot:
+      weight: 1
+  rebalance: true
+  targetKind: FederatedDeployment
+  totalReplicas: 12
