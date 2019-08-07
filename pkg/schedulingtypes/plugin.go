@@ -152,6 +152,7 @@ func (p *Plugin) Reconcile(qualifiedName util.QualifiedName, result map[string]i
 	if err != nil {
 		return err
 	}
+
 	if PlacementUpdateNeeded(clusterNames, newClusterNames) {
 		if err := util.SetClusterNames(fedObject, newClusterNames); err != nil {
 			return err
@@ -213,9 +214,9 @@ func updateOverridesMap(overridesMap util.OverridesMap, replicasMap map[string]i
 	// Add/update replicas override for clusters that are scheduled
 	for clusterName, replicas := range replicasMap {
 		replicasOverrideFound := false
-		for _, overrideItem := range overridesMap[clusterName] {
+		for idx, overrideItem := range overridesMap[clusterName] {
 			if overrideItem.Path == replicasPath {
-				overrideItem.Value = replicas
+				overridesMap[clusterName][idx].Value = replicas
 				replicasOverrideFound = true
 				break
 			}
