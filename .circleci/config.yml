@@ -1,0 +1,33 @@
+version: 2
+general:
+  branches:
+    only:
+      - branch-0.1.0-rc6
+    ignore:
+      - master
+jobs:
+  build:
+    environment:
+      REGISTRY: banzaicloud
+      TARGET: kubefed
+    working_directory: /go/src/sigs.k8s.io/kubefed
+    docker:
+      - image: circleci/golang:1.13
+      - image: docker:17.05.0-ce-git
+
+    steps:
+      - checkout
+
+      - setup_remote_docker:
+            reusable: true
+            exclusive: true
+
+      - deploy:
+          name: Build & push docker image
+          command: |
+            make container
+            export GIT_VERSION = $(shell git describe --tags --exact-match 2>/dev/null || git symbolic-ref -q --short HEAD)
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            dockmer push $(REGISTRY)/$(TARGET):$(GIT_VERSION)
+
+
