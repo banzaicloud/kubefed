@@ -23,7 +23,7 @@ DOCKER ?= docker
 HOST_ARCH ?= $(shell go env GOARCH)
 HOST_PLATFORM ?= $(shell uname -s | tr A-Z a-z)-$(HOST_ARCH)
 
-GIT_VERSION ?= $(shell git describe --always --dirty)
+GIT_VERSION ?= $(shell git describe --tags --exact-match 2>/dev/null || git symbolic-ref -q --short HEAD)
 GIT_TAG ?= $(shell git describe --tags --exact-match 2>/dev/null)
 GIT_HASH ?= $(shell git rev-parse HEAD)
 BUILDDATE = $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
@@ -96,7 +96,7 @@ ALL_BINS :=
 
 define PLATFORM_template
 $(1)-$(2): bindir
-	$(DOCKER_BUILD) 'GOARCH=$(word 2,$(subst -, ,$(2))) GOOS=$(word 1,$(subst -, ,$(2))) $(GO_BUILDCMD) -o $(1)-$(2) cmd/$(3)/main.go'
+	GOARCH=$(word 2,$(subst -, ,$(2))) GOOS=$(word 1,$(subst -, ,$(2))) $(GO_BUILDCMD) -o $(1)-$(2) cmd/$(3)/main.go
 ALL_BINS := $(ALL_BINS) $(1)-$(2)
 endef
 $(foreach cmd, $(COMMANDS), $(foreach platform, $(PLATFORMS), $(eval $(call PLATFORM_template, $(cmd),$(platform),$(notdir $(cmd))))))

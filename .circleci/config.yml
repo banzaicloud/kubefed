@@ -1,0 +1,33 @@
+version: 2.1
+
+jobs:
+  build:
+    environment:
+      REGISTRY: banzaicloud
+      TARGET: kubefed
+    working_directory: /go/src/sigs.k8s.io/kubefed
+    docker:
+      - image: circleci/golang:1.13
+    steps:
+      - checkout
+
+      - setup_remote_docker
+
+      - deploy:
+          name: Build & push docker image
+          command: |
+            make container
+            docker login -u ${DOCKER_LOGIN} -p ${DOCKER_PASSWORD}
+            docker push ${REGISTRY}/${TARGET}:${CIRCLE_TAG}
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build:
+          context: dockerhub
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v?[0-9]+\.[0-9]+\.[0-9]+(?:-(?:dev|rc|alpha)\.?[0-9]+\.[0-9]+)?$/
