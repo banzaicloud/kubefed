@@ -19,4 +19,4 @@ workflows:
                         branches:
                             ignore: /.*/
                         tags:
-                            only: /chart\/kubefed\/\d+.\d+.\d+/
+                            only: /chart\/kubefed\/\d+.\d+.\d+(-.*)?/
